@@ -85,8 +85,8 @@ type QuickReply struct {
 // Payload is the information on where an attachment is.
 type Payload struct {
 	// URL is where the attachment resides on the internet.
-	URL string      `json:"url,omitempty"`
-	Cor Coordinates `json:"coordinates,omitempty"`
+	URL string       `json:"url,omitempty"`
+	Cor *Coordinates `json:"coordinates,omitempty"`
 }
 
 type Coordinates struct {
