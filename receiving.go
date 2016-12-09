@@ -1,7 +1,5 @@
 package messenger
 
-import "time"
-
 // Receive is the format in which webhook events are sent.
 type Receive struct {
 	// Object should always be `page`. (I don't quite understand why)
@@ -39,19 +37,6 @@ type MessageInfo struct {
 	PostBack *PostBack `json:"postback"`
 
 	Read *Read `json:"read"`
-
-	OptIn *OptIn `json:"optin"`
-}
-
-type OptIn struct {
-	// Sender is the sender of the message
-	Sender Sender `json:"-"`
-	// Recipient is who the message was sent to.
-	Recipient Recipient `json:"-"`
-	// Time is when the message was sent.
-	Time time.Time `json:"-"`
-	// Ref is the reference as given
-	Ref string `json:"ref"`
 }
 
 // Sender is who the message was sent from.
@@ -85,5 +70,11 @@ type QuickReply struct {
 // Payload is the information on where an attachment is.
 type Payload struct {
 	// URL is where the attachment resides on the internet.
-	URL string `json:"url,omitempty"`
+	URL string      `json:"url,omitempty"`
+	Cor Coordinates `json:"coordinates,omitempty"`
+}
+
+type Coordinates struct {
+	Latitude  float64 `json:"lat"`
+	Longitude float64 `json:"long"`
 }
