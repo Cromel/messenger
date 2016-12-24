@@ -262,6 +262,46 @@ func (r *Response) GenericTemplate(elements *[]StructuredMessageElement) error {
 	return checkFacebookError(resp.Body)
 }
 
+// ListTemplate is a message which allows for list elements to be sent
+func (r *Response) ListTemplate(elements *[]StructuredMessageElement, buttons *[]StructuredMessageButton) error {
+	m := SendStructuredMessage{
+		Recipient: r.to,
+		Message: StructuredMessageData{
+			Attachment: StructuredMessageAttachment{
+				Type: "template",
+				Payload: StructuredMessagePayload{
+					TemplateType: "list",
+					Buttons:      buttons,
+					Elements:     elements,
+				},
+			},
+		},
+	}
+
+	data, err := json.Marshal(m)
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequest("POST", SendMessageURL, bytes.NewBuffer(data))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.URL.RawQuery = "access_token=" + r.token
+
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	return checkFacebookError(resp.Body)
+}
+
 // SenderAction sends a info about sender action
 func (r *Response) SenderAction(action string) error {
 	m := SendSenderAction{
@@ -336,11 +376,12 @@ type StructuredMessagePayload struct {
 
 // StructuredMessageElement is a response containing structural elements
 type StructuredMessageElement struct {
-	Title    string                    `json:"title"`
-	ImageURL string                    `json:"image_url"`
-	ItemURL  string                    `json:"item_url"`
-	Subtitle string                    `json:"subtitle"`
-	Buttons  []StructuredMessageButton `json:"buttons"`
+	Title         string                          `json:"title"`
+	ImageURL      string                          `json:"image_url"`
+	ItemURL       string                          `json:"item_url"`
+	Subtitle      string                          `json:"subtitle"`
+	Buttons       []StructuredMessageButton       `json:"buttons"`
+	DefaultAction *StructuredMessageDefaultAction `json:"default_action,omitempty"`
 }
 
 // StructuredMessageButton is a response containing buttons
@@ -348,6 +389,13 @@ type StructuredMessageButton struct {
 	Type    string `json:"type"`
 	URL     string `json:"url,omitempty"`
 	Title   string `json:"title"`
+	Payload string `json:"payload,omitempty"`
+}
+
+// StructuredMessageDefaultAction is a response containing defaultAction
+type StructuredMessageDefaultAction struct {
+	Type    string `json:"type"`
+	URL     string `json:"url,omitempty"`
 	Payload string `json:"payload,omitempty"`
 }
 
