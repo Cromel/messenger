@@ -263,7 +263,7 @@ func (r *Response) GenericTemplate(elements *[]StructuredMessageElement) error {
 }
 
 // ListTemplate is a message which allows for list elements to be sent
-func (r *Response) ListTemplate(elements *[]StructuredMessageElement, buttons *[]StructuredMessageButton) error {
+func (r *Response) ListTemplate(elements *[]StructuredMessageElement, buttons *[]StructuredMessageButton, style string) error {
 	m := SendStructuredMessage{
 		Recipient: r.to,
 		Message: StructuredMessageData{
@@ -273,7 +273,7 @@ func (r *Response) ListTemplate(elements *[]StructuredMessageElement, buttons *[
 					TemplateType:    "list",
 					Buttons:         buttons,
 					Elements:        elements,
-					TopElementStyle: "compact",
+					TopElementStyle: style,
 				},
 			},
 		},
