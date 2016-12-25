@@ -270,9 +270,10 @@ func (r *Response) ListTemplate(elements *[]StructuredMessageElement, buttons *[
 			Attachment: StructuredMessageAttachment{
 				Type: "template",
 				Payload: StructuredMessagePayload{
-					TemplateType: "list",
-					Buttons:      buttons,
-					Elements:     elements,
+					TemplateType:    "list",
+					Buttons:         buttons,
+					Elements:        elements,
+					TopElementStyle: "compact",
 				},
 			},
 		},
@@ -367,11 +368,12 @@ type StructuredMessageAttachment struct {
 // StructuredMessagePayload is the actual payload of an attachment
 type StructuredMessagePayload struct {
 	// TemplateType must be button, generic or receipt
-	TemplateType string                      `json:"template_type,omitempty"`
-	Text         string                      `json:"text,omitempty"`
-	Elements     *[]StructuredMessageElement `json:"elements,omitempty"`
-	Buttons      *[]StructuredMessageButton  `json:"buttons,omitempty"`
-	Url          string                      `json:"url,omitempty"`
+	TemplateType    string                      `json:"template_type,omitempty"`
+	Text            string                      `json:"text,omitempty"`
+	TopElementStyle string                      `json:"top_element_style,omitempty"`
+	Elements        *[]StructuredMessageElement `json:"elements,omitempty"`
+	Buttons         *[]StructuredMessageButton  `json:"buttons,omitempty"`
+	Url             string                      `json:"url,omitempty"`
 }
 
 // StructuredMessageElement is a response containing structural elements
