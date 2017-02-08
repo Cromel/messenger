@@ -81,6 +81,7 @@ func New(mo Options) *Messenger {
 	m.mux.HandleFunc(mo.WebhookURL, m.handle)
 
 	return m
+
 }
 
 // HandleMessage adds a new MessageHandler to the Messenger which will be triggered
@@ -301,11 +302,13 @@ func (m *Messenger) dispatch(r Receive) {
 }
 
 // Response returns new Response object
-func (m *Messenger) Response(to int64) *Response {
-	return &Response{
+func (m *Messenger) Response(to int64) ResponseInterface {
+	r := &Response{
 		to:    Recipient{to},
 		token: m.token,
 	}
+
+	return r
 }
 
 // Send will send a textual message to a user. This user must have previously initiated a conversation with the bot.
